@@ -1,0 +1,54 @@
+version: "3.5"
+
+services:
+  # auth:
+  #   image: effimate-auth:dev
+  #   restart: always
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - postgres-webapi
+  #   ports:
+  #     - 127.0.0.1:8080:8080
+  #   depends_on:
+  #     - postgres-webapi
+  #     - pgadmin-webapi
+
+  postgres-webapi:
+    container_name: postgres-sql-webapi
+    image: postgres
+    environment:
+      POSTGRES_USER: develop
+      POSTGRES_PASSWORD: effimatebackend
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-webapi:/data/postgres
+    ports:
+      - "5435:5432"
+    networks:
+      - postgres-webapi
+    restart: unless-stopped
+
+  pgadmin-webapi:
+    container_name: pgadmin-webapi
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-webapi:/var/lib/pgadmin
+    ports:
+      - "5053:80"
+    networks:
+      - postgres-webapi
+    restart: unless-stopped
+
+networks:
+  postgres-webapi:
+    driver: bridge
+
+volumes:
+  postgres-webapi:
+  pgadmin-webapi:
