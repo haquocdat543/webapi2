@@ -12,7 +12,8 @@ public static class UserEndpoint
 	  var users = new[]
 		  {
 				new User { Id = 1, Name = "Alice" },
-				new User { Id = 2, Name = "Bob" }
+				new User { Id = 2, Name = "Bob" },
+				new User { Id = 3, Name = "Charlie" }
 		};
 	  return Results.Ok(users);
 	})
