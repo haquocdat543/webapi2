@@ -1,7 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Module.User;
+using Module.User.Services;
+using Module.User.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Register services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // 1. Use PostgreSQL
 builder.Services.AddDbContext<UserDbContext>(options =>
