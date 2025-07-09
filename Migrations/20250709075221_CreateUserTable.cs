@@ -22,6 +22,12 @@ namespace webapi.Migrations
 			Dob = table.Column<string>(type: "date", nullable: true),
 			Role = table.Column<string>(type: "text", nullable: true),
 			Address = table.Column<string>(type: "text", nullable: true),
+
+			// Timestamp columns
+			CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+			UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+			DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+
 		  },
 		  constraints: table =>
 		  {
