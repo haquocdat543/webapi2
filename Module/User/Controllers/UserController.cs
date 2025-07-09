@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Module.User.DTOs;
+using Module.User.Services;
 
 namespace Module.User.Controllers;
 
@@ -7,49 +8,47 @@ namespace Module.User.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-  private readonly UserDbContext _context;
+  private readonly IUserService _userService;
 
-  public UserController(UserDbContext context)
+  public UserController(IUserService userService)
   {
-	_context = context;
+	_userService = userService;
   }
 
   [HttpGet]
   public async Task<IActionResult> GetUsers()
   {
-	var users = await _context.Users.ToListAsync();
+	var users = await _userService.GetAllUsersAsync();
 	return Ok(users);
   }
 
-  [HttpPost]
-  public async Task<IActionResult> CreateUser([FromBody] Entities.User user)
+  [HttpGet("{id}")]
+  public async Task<IActionResult> GetUserById(Guid id)
   {
-	_context.Users.Add(user);
-	await _context.SaveChangesAsync();
-	return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
-  }
-
-  [HttpPut("{id}")]
-  public async Task<IActionResult> UpdateUser(int id, [FromBody] Entities.User updatedUser)
-  {
-	var user = await _context.Users.FindAsync(id);
+	var user = await _userService.GetUserByIdAsync(id);
 	if (user == null)
 	  return NotFound();
 
-	user.Name = updatedUser.Name;
-	await _context.SaveChangesAsync();
-	return NoContent();
+	return Ok(user);
+  }
+
+  [HttpPost]
+  public async Task<IActionResult> CreateUser([FromBody] CreateUserDTO dto)
+  {
+	if (!ModelState.IsValid)
+	  return BadRequest(ModelState);
+
+	var createdUser = await _userService.CreateUserAsync(dto);
+	return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
   }
 
   [HttpDelete("{id}")]
-  public async Task<IActionResult> DeleteUser(int id)
+  public async Task<IActionResult> DeleteUser(Guid id)
   {
-	var user = await _context.Users.FindAsync(id);
-	if (user == null)
+	var deleted = await _userService.DeleteUserAsync(id);
+	if (!deleted)
 	  return NotFound();
 
-	_context.Users.Remove(user);
-	await _context.SaveChangesAsync();
 	return NoContent();
   }
 }
