@@ -12,7 +12,7 @@ namespace webapi.Migrations
 	protected override void Up(MigrationBuilder migrationBuilder)
 	{
 	  migrationBuilder.CreateTable(
-		  name: "users",
+		  name: "user",
 		  columns: table => new
 		  {
 			Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
@@ -33,7 +33,7 @@ namespace webapi.Migrations
 	protected override void Down(MigrationBuilder migrationBuilder)
 	{
 	  migrationBuilder.DropTable(
-		  name: "users");
+		  name: "user");
 	}
   }
 }
