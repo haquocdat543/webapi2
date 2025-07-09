@@ -4,9 +4,9 @@ namespace Module.User;
 
 public class UserDbContext : DbContext
 {
-    public UserDbContext(DbContextOptions<UserDbContext> options)
-        : base(options) { }
+  public UserDbContext(DbContextOptions<UserDbContext> options)
+	  : base(options) { }
 
-    public DbSet<AppUser> Users => Set<AppUser>();
+  public DbSet<Entities.User> Users => Set<Entities.User>();
 }
 
