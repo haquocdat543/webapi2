@@ -8,62 +8,62 @@ namespace Module.User.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-  private readonly IUserService _userService;
+    private readonly IUserService _userService;
 
-  public UserController(IUserService userService)
-  {
-	_userService = userService;
-  }
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
 
-  [HttpGet]
-  public async Task<IActionResult> GetUsers()
-  {
-	var users = await _userService.GetAllUsersAsync();
-	return Ok(users);
-  }
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
+        return Ok(users);
+    }
 
-  [HttpGet("{id}")]
-  public async Task<IActionResult> GetUserById(Guid id)
-  {
-	var user = await _userService.GetUserByIdAsync(id);
-	if (user == null)
-	  return NotFound();
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+        if (user == null)
+            return NotFound();
 
-	return Ok(user);
-  }
+        return Ok(user);
+    }
 
-  [HttpPost]
-  public async Task<IActionResult> CreateUser([FromBody] CreateUserDTO dto)
-  {
-	if (!ModelState.IsValid)
-	  return BadRequest(ModelState);
+    [HttpPost]
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-	var createdUser = await _userService.CreateUserAsync(dto);
-	return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
-  }
+        var createdUser = await _userService.CreateUserAsync(dto);
+        return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+    }
 
-  [HttpPost]
-  public async Task<IActionResult> Login([FromBody] LoginUserDTO dto)
-  {
-	if (!ModelState.IsValid)
-	  return BadRequest(ModelState);
+    [HttpPost]
+    public async Task<IActionResult> Login([FromBody] LoginUserDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-	bool isAuthenticated = await _userService.LoginAsync(dto);
+        bool isAuthenticated = await _userService.LoginAsync(dto);
 
-	if (!isAuthenticated)
-	  return Unauthorized();
+        if (!isAuthenticated)
+            return Unauthorized();
 
-	return Ok(true); // or Ok() if you prefer no body
-  }
+        return Ok(true); // or Ok() if you prefer no body
+    }
 
-  [HttpDelete("{id}")]
-  public async Task<IActionResult> DeleteUser(Guid id)
-  {
-	var deleted = await _userService.DeleteUserAsync(id);
-	if (!deleted)
-	  return NotFound();
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var deleted = await _userService.DeleteUserAsync(id);
+        if (!deleted)
+            return NotFound();
 
-	return NoContent();
-  }
+        return NoContent();
+    }
 }
 
