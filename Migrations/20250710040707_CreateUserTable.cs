@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -14,23 +15,20 @@ namespace webapi.Migrations
 		  name: "user",
 		  columns: table => new
 		  {
-			Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+			Id = table.Column<Guid>(type: "uuid", nullable: false),
 			Name = table.Column<string>(type: "text", nullable: false),
 			Email = table.Column<string>(type: "text", nullable: false),
 			Password = table.Column<string>(type: "text", nullable: false),
-			Dob = table.Column<string>(type: "date", nullable: true),
+			Dob = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
 			Role = table.Column<string>(type: "text", nullable: true),
 			Address = table.Column<string>(type: "text", nullable: true),
-
-			// Timestamp columns
-			CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
+			CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
 			UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
 			DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-
 		  },
 		  constraints: table =>
 		  {
-			table.PrimaryKey("PK_Users", x => x.Id);
+			table.PrimaryKey("PK_user", x => x.Id);
 		  });
 	}
 
