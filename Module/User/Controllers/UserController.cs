@@ -42,7 +42,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO dto)
     {
         if (!ModelState.IsValid)

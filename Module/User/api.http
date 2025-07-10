@@ -1,14 +1,22 @@
 @webapi_HostAddress = http://localhost:5266
 
-### GET /weatherforecast
+### GET /api/user
 GET {{webapi_HostAddress}}/api/user
 
-### POST /weatherforecast
+### POST /api/user
 POST {{webapi_HostAddress}}/api/user
 
 {
 	"name": "haquocdat",
 	"email": "haquocdat@gmail.com",
+	"password": "12345678"
+}
+
+### POST /api/user/login
+POST {{webapi_HostAddress}}/api/user/login
+
+{
+	"name": "haquocdat",
 	"password": "12345678"
 }
 
