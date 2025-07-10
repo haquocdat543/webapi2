@@ -21,6 +21,11 @@ public class UserRepository : IUserRepository
 	return await _context.Users.FirstOrDefaultAsync(u => u.Id == id && u.DeletedAt == null);
   }
 
+  public async Task<Entities.User?> GetPasswordByNameAsync(string name)
+  {
+	return await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
+  }
+
   public async Task<Entities.User?> GetByEmailAsync(string email)
   {
 	return await _context.Users.FirstOrDefaultAsync(u => u.Email == email && u.DeletedAt == null);

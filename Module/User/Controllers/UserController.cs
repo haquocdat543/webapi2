@@ -42,6 +42,20 @@ public class UserController : ControllerBase
 	return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
   }
 
+  [HttpPost]
+  public async Task<IActionResult> Login([FromBody] LoginUserDTO dto)
+  {
+	if (!ModelState.IsValid)
+	  return BadRequest(ModelState);
+
+	bool isAuthenticated = await _userService.LoginAsync(dto);
+
+	if (!isAuthenticated)
+	  return Unauthorized();
+
+	return Ok(true); // or Ok() if you prefer no body
+  }
+
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeleteUser(Guid id)
   {
