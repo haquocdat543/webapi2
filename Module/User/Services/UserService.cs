@@ -85,6 +85,26 @@ public class UserService : IUserService
     }
 
 
+		public async Task<bool> UpdatePasswordAsync(DTOs.UpdatePasswordDTO dto)
+    {
+        if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))
+            return false;
+    
+        var user = await _repo.GetUserByNameAsync(dto.Name);
+        if (user == null)
+            return false;
+    
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
+        if (!isPasswordValid)
+            return false;
+    
+				user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+
+        await _repo.UpdateAsync(user);
+        return true;
+    }
+
+
 		public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))
@@ -101,6 +121,7 @@ public class UserService : IUserService
         await _repo.DeleteAsync(dto.Name);
         return true;
     }
+
 
 }
 

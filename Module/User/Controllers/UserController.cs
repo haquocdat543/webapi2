@@ -56,6 +56,20 @@ public class UserController : ControllerBase
         return Ok(true); // or Ok() if you prefer no body
     }
 
+    [HttpPatch("password")]
+    public async Task<IActionResult> Login([FromBody] UpdatePasswordDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        bool isAuthenticated = await _userService.UpdatePasswordAsync(dto);
+
+        if (!isAuthenticated)
+            return Unauthorized();
+
+        return Ok(true); // or Ok() if you prefer no body
+    }
+
     [HttpDelete()]
     public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO dto)
     {

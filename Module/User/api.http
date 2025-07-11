@@ -20,6 +20,24 @@ POST {{webapi_HostAddress}}/api/user/login
 	"password": "12345678"
 }
 
+### PATCH /api/user/password
+PATCH {{webapi_HostAddress}}/api/user/password
+
+{
+	"name": "haquocdat",
+	"password": "12345678",
+	"newpassword": "12345679"
+}
+
+### PATCH /api/user/password
+PATCH {{webapi_HostAddress}}/api/user/password
+
+{
+	"name": "haquocdat",
+	"password": "12345679",
+	"newpassword": "12345678"
+}
+
 ### DELETE /api/user
 DELETE {{webapi_HostAddress}}/api/user
 
