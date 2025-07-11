@@ -73,13 +73,13 @@ public class UserService : IUserService
     public async Task<bool> LoginAsync(DTOs.LoginUserDTO dto)
     {
         // Get the hashed password from the repo
-        var hashedPassword = await _repo.GetPasswordByNameAsync(dto.Name);
+        var user = await _repo.GetUserByNameAsync(dto.Name);
 
-        if (hashedPassword == null)
+        if (user == null)
             return false;
 
         // Verify entered password against stored hash
-        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, hashedPassword.ToString());
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password.ToString());
 
         return isPasswordValid;
     }
