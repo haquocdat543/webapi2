@@ -20,3 +20,11 @@ POST {{webapi_HostAddress}}/api/user/login
 	"password": "12345678"
 }
 
+### DELETE /api/user
+DELETE {{webapi_HostAddress}}/api/user
+
+{
+	"name": "haquocdat",
+	"password": "12345678"
+}
+

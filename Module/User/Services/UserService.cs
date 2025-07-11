@@ -85,13 +85,22 @@ public class UserService : IUserService
     }
 
 
-    public async Task<bool> DeleteUserAsync(Guid id)
+		public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
     {
-        var user = await _repo.GetByIdAsync(id);
-        if (user == null) return false;
-
-        await _repo.DeleteAsync(user);
+        if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))
+            return false;
+    
+        var user = await _repo.GetUserByNameAsync(dto.Name);
+        if (user == null)
+            return false;
+    
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
+        if (!isPasswordValid)
+            return false;
+    
+        await _repo.DeleteAsync(dto.Name);
         return true;
     }
+
 }
 

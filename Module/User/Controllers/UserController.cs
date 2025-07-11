@@ -56,14 +56,14 @@ public class UserController : ControllerBase
         return Ok(true); // or Ok() if you prefer no body
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(Guid id)
+    [HttpDelete()]
+    public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO dto)
     {
-        var deleted = await _userService.DeleteUserAsync(id);
+        var deleted = await _userService.DeleteUserAsync(dto);
         if (!deleted)
-            return NotFound();
+            return BadRequest(deleted);
 
-        return NoContent();
+        return Ok(true);
     }
 }
 

@@ -8,6 +8,6 @@ public interface IUserRepository
     Task<Entities.User?> GetByEmailAsync(string email);
     Task<Entities.User> AddAsync(Entities.User user);
     Task UpdateAsync(Entities.User user);
-    Task DeleteAsync(Entities.User user);
+    Task DeleteAsync(string name);
 }
 
