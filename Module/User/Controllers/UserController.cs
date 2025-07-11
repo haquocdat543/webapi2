@@ -42,6 +42,13 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
     }
 
+    [HttpPost("seed")]
+    public async Task<IActionResult> Seed()
+    {
+        var result = await _userService.SeedAsync();
+        return Ok(result);
+    }
+
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginUserDTO dto)
     {

@@ -70,6 +70,43 @@ public class UserService : IUserService
     }
 
 
+    public async Task<bool> SeedAsync()
+    {
+	      var predefinedUsers = new List<Entities.User>
+		      {
+			      new Entities.User {
+							Name = "admin",
+							Email = "admin@example.com",
+							Password = "Admin123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1990, 1, 1), DateTimeKind.Utc),
+							Role = "Manager",
+							Address = "USA",
+						},
+			      new Entities.User {
+							Name = "john_doe",
+							Email = "john@example.com",
+							Password = "John123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1991, 2, 2), DateTimeKind.Utc),
+							Role = "Director",
+							Address = "Germany",
+						},
+			      new Entities.User {
+							Name = "jane_doe",
+							Email = "jane@example.com",
+							Password = "Jane123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+							Role = "Employee",
+							Address = "France",
+						}
+		      };
+      
+	      foreach (var user in predefinedUsers)
+	      {
+	        await _repo.AddAsync(user);
+	      }
+			  return true;
+    }
+
     public async Task<bool> LoginAsync(DTOs.LoginUserDTO dto)
     {
         // Get the hashed password from the repo

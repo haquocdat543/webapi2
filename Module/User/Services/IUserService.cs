@@ -7,6 +7,7 @@ public interface IUserService
     Task<DTOs.UserDTO?> GetUserByIdAsync(Guid id);
     Task<DTOs.UserDTO> CreateUserAsync(DTOs.CreateUserDTO dto);
     Task<bool> UpdatePasswordAsync(DTOs.UpdatePasswordDTO dto);
+    Task<bool> SeedAsync();
     Task<bool> LoginAsync(DTOs.LoginUserDTO dto);
     Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto);
 }

@@ -12,6 +12,9 @@ POST {{webapi_HostAddress}}/api/user
 	"password": "12345678"
 }
 
+### POST /api/user/seed
+POST {{webapi_HostAddress}}/api/user/seed
+
 ### POST /api/user/login
 POST {{webapi_HostAddress}}/api/user/login
 
