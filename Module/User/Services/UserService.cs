@@ -97,7 +97,31 @@ public class UserService : IUserService
 							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
 							Role = "Employee",
 							Address = "France",
-						}
+						},
+			      new Entities.User {
+							Name = "charlie_doe",
+							Email = "charlie@example.com",
+							Password = "Charlie123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+							Role = "CEO",
+							Address = "Polish",
+						},
+			      new Entities.User {
+							Name = "bob_doe",
+							Email = "bob@example.com",
+							Password = "Bob123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+							Role = "CTO",
+							Address = "Russia",
+						},
+			      new Entities.User {
+							Name = "alice_doe",
+							Email = "alice@example.com",
+							Password = "alice123!",
+							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+							Role = "Software Engineer",
+							Address = "Canada",
+						},
 		      };
       
 	      foreach (var user in predefinedUsers)
