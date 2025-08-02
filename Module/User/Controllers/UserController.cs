@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Module.User.DTOs;
 using Module.User.Services;
@@ -9,10 +10,12 @@ namespace Module.User.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IJwtService _jwtService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IJwtService jwtService)
     {
         _userService = userService;
+        _jwtService = jwtService;
     }
 
     [HttpGet]
@@ -60,7 +63,8 @@ public class UserController : ControllerBase
         if (!isAuthenticated)
             return Unauthorized();
 
-        return Ok(true); // or Ok() if you prefer no body
+				var token = _jwtService.GenerateToken(dto.Name);
+        return Ok(new { token }); // or Ok() if you prefer no body
     }
 
     [HttpPatch("password")]
@@ -74,9 +78,10 @@ public class UserController : ControllerBase
         if (!isAuthenticated)
             return Unauthorized();
 
-        return Ok(true); // or Ok() if you prefer no body
+        return Ok(); // or Ok() if you prefer no body
     }
 
+	  [Authorize]
     [HttpDelete()]
     public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO dto)
     {

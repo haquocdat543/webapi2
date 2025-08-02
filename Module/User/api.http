@@ -1,4 +1,5 @@
 @webapi_HostAddress = http://localhost:5266
+@TOKEN = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoYXF1b2NkYXQiLCJqdGkiOiJlMTVjZmIyYS01ODUyLTQwZjYtYmZhNi03ODg3MDY3MTU0ZGQiLCJleHAiOjE3NTQxMTM2MjMsImlzcyI6IllvdXJBcHAiLCJhdWQiOiJZb3VyQXBwVXNlcnMifQ.T6ldAhafBsLPZDV5iSwibtXk0foPcx65nMQe4lzOMdo
 
 ### GET /api/user
 GET {{webapi_HostAddress}}/api/user
@@ -43,6 +44,8 @@ PATCH {{webapi_HostAddress}}/api/user/password
 
 ### DELETE /api/user
 DELETE {{webapi_HostAddress}}/api/user
+Content-Type: application/json
+Authorization: {{TOKEN}}
 
 {
 	"name": "haquocdat",
