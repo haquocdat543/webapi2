@@ -1,6 +1,9 @@
 r:
 	dotnet run
 
+w:
+	dotnet watch run
+
 ief:
 	dotnet tool install --global dotnet-ef
 
