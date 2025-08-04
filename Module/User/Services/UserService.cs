@@ -165,6 +165,36 @@ public class UserService : IUserService
         return true;
     }
 
+    public async Task<bool> PatchUserAsync(DTOs.PatchUserDTO dto, string name)
+    {
+        var user = await _repo.GetUserByNameAsync(name);
+        if (user == null)
+            return false;
+    
+        // Update DOB if provided and valid
+        if (!string.IsNullOrWhiteSpace(dto.Dob))
+        {
+            if (!DateTime.TryParse(dto.Dob, out var parsedDob))
+                return false; // Invalid date format
+    
+            user.Dob = parsedDob;
+        }
+    
+        // Update Role if provided
+        if (!string.IsNullOrWhiteSpace(dto.Role))
+        {
+            user.Role = dto.Role;
+        }
+    
+        // Update Address if provided
+        if (!string.IsNullOrWhiteSpace(dto.Address))
+        {
+            user.Address = dto.Address;
+        }
+    
+        await _repo.UpdateAsync(user);
+        return true;
+    }
 
 		public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
     {
