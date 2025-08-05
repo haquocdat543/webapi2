@@ -1,5 +1,5 @@
 @webapi_HostAddress = http://localhost:5266
-@TOKEN = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoYXF1b2NkYXQiLCJqdGkiOiJlMTVjZmIyYS01ODUyLTQwZjYtYmZhNi03ODg3MDY3MTU0ZGQiLCJleHAiOjE3NTQxMTM2MjMsImlzcyI6IllvdXJBcHAiLCJhdWQiOiJZb3VyQXBwVXNlcnMifQ.T6ldAhafBsLPZDV5iSwibtXk0foPcx65nMQe4lzOMdo
+@TOKEN = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoYXF1b2NkYXQiLCJqdGkiOiJlMmRkYzg4OC1jNzQzLTRlZDAtYWFjNC05YTViMTI3ZDVmNDQiLCJleHAiOjE3NTQzNTU3MzQsImlzcyI6IllvdXJBcHAiLCJhdWQiOiJZb3VyQXBwVXNlcnMifQ.rY-vHauZhpv49IpgutMoCba2yrj0gvItEaUR_pFwzxw
 
 ### GET /api/user
 GET {{webapi_HostAddress}}/api/user
@@ -42,10 +42,19 @@ PATCH {{webapi_HostAddress}}/api/user/password
 	"newpassword": "12345678"
 }
 
-### DELETE /api/user
-DELETE {{webapi_HostAddress}}/api/user
+### PATCH /api/user
+PATCH {{webapi_HostAddress}}/api/user
 Content-Type: application/json
 Authorization: {{TOKEN}}
+
+{
+	"dob": "2000-01-01",
+	"role": "Leader",
+	"address": "South Vietnam"
+}
+
+### DELETE /api/user
+DELETE {{webapi_HostAddress}}/api/user
 
 {
 	"name": "haquocdat",
