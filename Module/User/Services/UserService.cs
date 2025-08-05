@@ -177,7 +177,7 @@ public class UserService : IUserService
             if (!DateTime.TryParse(dto.Dob, out var parsedDob))
                 return false; // Invalid date format
 
-            user.Dob = parsedDob;
+            user.Dob = DateTime.SpecifyKind(parsedDob, DateTimeKind.Utc);
         }
 
         // Update Role if provided

@@ -61,7 +61,7 @@ namespace Module.User.Services
             try
             {
                 var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
-                return principal.FindFirstValue(JwtRegisteredClaimNames.Sub); // returns username
+                return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             }
             catch
             {
