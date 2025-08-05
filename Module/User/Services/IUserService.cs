@@ -9,7 +9,7 @@ public interface IUserService
     Task<bool> UpdatePasswordAsync(DTOs.UpdatePasswordDTO dto);
     Task<bool> SeedAsync();
     Task<bool> LoginAsync(DTOs.LoginUserDTO dto);
-    Task<bool> PatchUserAsync(DTOs.PatchUserDTO dto);
+    Task<bool> PatchUserAsync(DTOs.PatchUserDTO dto, string name);
     Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto);
 }
 

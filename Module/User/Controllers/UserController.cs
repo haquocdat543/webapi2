@@ -88,7 +88,13 @@ public class UserController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _userService.PatchUserAsync(dto);
+        var authHeader = Request.Headers["Authorization"].ToString();
+        var username = _jwtService.ExtractUsernameFromBearer(authHeader);
+
+			  if (username == null)
+		      return Forbid();
+
+        var result = await _userService.PatchUserAsync(dto, username);
         if (!result)
             return Unauthorized();
 

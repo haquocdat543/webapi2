@@ -68,6 +68,17 @@ namespace Module.User.Services
 		return null; // invalid token
 	  }
 	}
+
+	public string? ExtractUsernameFromBearer(string authorizationHeader)
+	{
+	  if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+		return null;
+
+	  var token = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+	  return ExtractUsername(token); // reuse the existing method
+	}
+
   }
 }
 
