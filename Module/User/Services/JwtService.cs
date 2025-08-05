@@ -1,45 +1,73 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Module.User.Services;
-
-public class JwtService : IJwtService
+namespace Module.User.Services
 {
-  private readonly IConfiguration _config;
-
-  public JwtService(IConfiguration config)
+  public class JwtService : IJwtService
   {
-	_config = config;
-  }
+	private readonly IConfiguration _config;
 
-  public string GenerateToken(string username)
-  {
-	var jwtSettings = _config.GetSection("JwtSettings");
-	var keyBytes = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key missing"));
-	var key = new SymmetricSecurityKey(keyBytes); // ✅ wrap the bytes
-	var expireBytes = Encoding.UTF8.GetBytes(jwtSettings["ExpiresInMinutes"] ?? throw new InvalidOperationException("JWT ExpiresInMinutes missing"));
-	var expire = new SymmetricSecurityKey(expireBytes); // ✅ wrap the bytes
-
-
-	var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-	var claims = new[]
+	public JwtService(IConfiguration config)
 	{
-			new Claim(JwtRegisteredClaimNames.Sub, username),
-			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-		};
+	  _config = config;
+	}
 
-	var token = new JwtSecurityToken(
-		issuer: jwtSettings["Issuer"],
-		audience: jwtSettings["Audience"],
-		claims: claims,
-		expires: DateTime.UtcNow.AddMinutes(double.Parse(expireBytes)),
-		signingCredentials: creds
-	);
+	public string GenerateToken(string username)
+	{
+	  var jwtSettings = _config.GetSection("JwtSettings");
+	  var keyBytes = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key missing"));
+	  var key = new SymmetricSecurityKey(keyBytes);
 
-	return new JwtSecurityTokenHandler().WriteToken(token);
+	  var expiresInMinutes = double.Parse(jwtSettings["ExpiresInMinutes"] ?? throw new InvalidOperationException("JWT ExpiresInMinutes missing"));
+
+	  var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+	  var claims = new[]
+	  {
+				new Claim(JwtRegisteredClaimNames.Sub, username),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+			};
+
+	  var token = new JwtSecurityToken(
+		  issuer: jwtSettings["Issuer"],
+		  audience: jwtSettings["Audience"],
+		  claims: claims,
+		  expires: DateTime.UtcNow.AddMinutes(expiresInMinutes),
+		  signingCredentials: creds
+	  );
+
+	  return new JwtSecurityTokenHandler().WriteToken(token);
+	}
+
+	public string? ExtractUsername(string token)
+	{
+	  var jwtSettings = _config.GetSection("JwtSettings");
+	  var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key missing"));
+
+	  var tokenHandler = new JwtSecurityTokenHandler();
+	  var validationParameters = new TokenValidationParameters
+	  {
+		ValidateIssuerSigningKey = true,
+		IssuerSigningKey = new SymmetricSecurityKey(key),
+		ValidateIssuer = true,
+		ValidateAudience = true,
+		ValidIssuer = jwtSettings["Issuer"],
+		ValidAudience = jwtSettings["Audience"],
+		ClockSkew = TimeSpan.Zero
+	  };
+
+	  try
+	  {
+		var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+		return principal.FindFirstValue(JwtRegisteredClaimNames.Sub); // returns username
+	  }
+	  catch
+	  {
+		return null; // invalid token
+	  }
+	}
   }
 }
+
