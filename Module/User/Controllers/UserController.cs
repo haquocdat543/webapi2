@@ -63,7 +63,7 @@ public class UserController : ControllerBase
         if (!isAuthenticated)
             return Unauthorized();
 
-				var token = _jwtService.GenerateToken(dto.Name);
+        var token = _jwtService.GenerateToken(dto.Name);
         return Ok(new { token }); // or Ok() if you prefer no body
     }
 
@@ -81,18 +81,18 @@ public class UserController : ControllerBase
         return Ok(); // or Ok() if you prefer no body
     }
 
-	  [Authorize]
+    [Authorize]
     [HttpPatch()]
     public async Task<IActionResult> PatchUser([FromBody] PatchUserDTO dto)
-		{
+    {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var authHeader = Request.Headers["Authorization"].ToString();
         var username = _jwtService.ExtractUsernameFromBearer(authHeader);
 
-			  if (username == null)
-		      return Forbid();
+        if (username == null)
+            return Forbid();
 
         var result = await _userService.PatchUserAsync(dto, username);
         if (!result)

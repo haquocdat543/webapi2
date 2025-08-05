@@ -72,63 +72,63 @@ public class UserService : IUserService
 
     public async Task<bool> SeedAsync()
     {
-	      var predefinedUsers = new List<Entities.User>
-		      {
-			      new Entities.User {
-							Name = "admin",
-							Email = "admin@example.com",
-							Password = "Admin123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1990, 1, 1), DateTimeKind.Utc),
-							Role = "Manager",
-							Address = "USA",
-						},
-			      new Entities.User {
-							Name = "john_doe",
-							Email = "john@example.com",
-							Password = "John123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1991, 2, 2), DateTimeKind.Utc),
-							Role = "Director",
-							Address = "Germany",
-						},
-			      new Entities.User {
-							Name = "jane_doe",
-							Email = "jane@example.com",
-							Password = "Jane123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
-							Role = "Employee",
-							Address = "France",
-						},
-			      new Entities.User {
-							Name = "charlie_doe",
-							Email = "charlie@example.com",
-							Password = "Charlie123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
-							Role = "CEO",
-							Address = "Polish",
-						},
-			      new Entities.User {
-							Name = "bob_doe",
-							Email = "bob@example.com",
-							Password = "Bob123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
-							Role = "CTO",
-							Address = "Russia",
-						},
-			      new Entities.User {
-							Name = "alice_doe",
-							Email = "alice@example.com",
-							Password = "alice123!",
-							Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
-							Role = "Software Engineer",
-							Address = "Canada",
-						},
-		      };
-      
-	      foreach (var user in predefinedUsers)
-	      {
-	        await _repo.AddAsync(user);
-	      }
-			  return true;
+        var predefinedUsers = new List<Entities.User>
+              {
+                  new Entities.User {
+                            Name = "admin",
+                            Email = "admin@example.com",
+                            Password = "Admin123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1990, 1, 1), DateTimeKind.Utc),
+                            Role = "Manager",
+                            Address = "USA",
+                        },
+                  new Entities.User {
+                            Name = "john_doe",
+                            Email = "john@example.com",
+                            Password = "John123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1991, 2, 2), DateTimeKind.Utc),
+                            Role = "Director",
+                            Address = "Germany",
+                        },
+                  new Entities.User {
+                            Name = "jane_doe",
+                            Email = "jane@example.com",
+                            Password = "Jane123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+                            Role = "Employee",
+                            Address = "France",
+                        },
+                  new Entities.User {
+                            Name = "charlie_doe",
+                            Email = "charlie@example.com",
+                            Password = "Charlie123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+                            Role = "CEO",
+                            Address = "Polish",
+                        },
+                  new Entities.User {
+                            Name = "bob_doe",
+                            Email = "bob@example.com",
+                            Password = "Bob123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+                            Role = "CTO",
+                            Address = "Russia",
+                        },
+                  new Entities.User {
+                            Name = "alice_doe",
+                            Email = "alice@example.com",
+                            Password = "alice123!",
+                            Dob = DateTime.SpecifyKind(new DateTime(1992, 3, 3), DateTimeKind.Utc),
+                            Role = "Software Engineer",
+                            Address = "Canada",
+                        },
+              };
+
+        foreach (var user in predefinedUsers)
+        {
+            await _repo.AddAsync(user);
+        }
+        return true;
     }
 
     public async Task<bool> LoginAsync(DTOs.LoginUserDTO dto)
@@ -146,20 +146,20 @@ public class UserService : IUserService
     }
 
 
-		public async Task<bool> UpdatePasswordAsync(DTOs.UpdatePasswordDTO dto)
+    public async Task<bool> UpdatePasswordAsync(DTOs.UpdatePasswordDTO dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))
             return false;
-    
+
         var user = await _repo.GetUserByNameAsync(dto.Name);
         if (user == null)
             return false;
-    
+
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
         if (!isPasswordValid)
             return false;
-    
-				user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+
+        user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
 
         await _repo.UpdateAsync(user);
         return true;
@@ -170,45 +170,45 @@ public class UserService : IUserService
         var user = await _repo.GetUserByNameAsync(name);
         if (user == null)
             return false;
-    
+
         // Update DOB if provided and valid
         if (!string.IsNullOrWhiteSpace(dto.Dob))
         {
             if (!DateTime.TryParse(dto.Dob, out var parsedDob))
                 return false; // Invalid date format
-    
+
             user.Dob = parsedDob;
         }
-    
+
         // Update Role if provided
         if (!string.IsNullOrWhiteSpace(dto.Role))
         {
             user.Role = dto.Role;
         }
-    
+
         // Update Address if provided
         if (!string.IsNullOrWhiteSpace(dto.Address))
         {
             user.Address = dto.Address;
         }
-    
+
         await _repo.UpdateAsync(user);
         return true;
     }
 
-		public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
+    public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))
             return false;
-    
+
         var user = await _repo.GetUserByNameAsync(dto.Name);
         if (user == null)
             return false;
-    
+
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
         if (!isPasswordValid)
             return false;
-    
+
         await _repo.DeleteAsync(dto.Name);
         return true;
     }

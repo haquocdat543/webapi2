@@ -19,25 +19,25 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // 1. Use PostgreSQL
 builder.Services.AddDbContext<UserDbContext>(options =>
-	options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication(options =>
 {
-  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>
 {
-  options.TokenValidationParameters = new TokenValidationParameters
-  {
-	ValidateIssuer = true,
-	ValidateAudience = true,
-	ValidateLifetime = true,
-	ValidateIssuerSigningKey = true,
-	ValidIssuer = jwtSettings["Issuer"],
-	ValidAudience = jwtSettings["Audience"],
-	IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
-  };
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+    };
 });
 
 builder.Services.AddAuthorization(); builder.Services.AddControllers();
@@ -48,8 +48,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-  app.UseSwagger();
-  app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

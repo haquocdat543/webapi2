@@ -45,20 +45,20 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-		public async Task DeleteAsync(string name)
+    public async Task DeleteAsync(string name)
     {
-    if (string.IsNullOrWhiteSpace(name))
-        throw new ArgumentException("Name must not be empty.", nameof(name));
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name must not be empty.", nameof(name));
 
-    var users = await _context.Users
-        .Where(u => u.Name == name)
-        .ToListAsync();
+        var users = await _context.Users
+            .Where(u => u.Name == name)
+            .ToListAsync();
 
-    if (!users.Any())
-        throw new InvalidOperationException($"No users found with name: {name}");
+        if (!users.Any())
+            throw new InvalidOperationException($"No users found with name: {name}");
 
-    _context.Users.RemoveRange(users);
-    await _context.SaveChangesAsync();
+        _context.Users.RemoveRange(users);
+        await _context.SaveChangesAsync();
     }
 
 
