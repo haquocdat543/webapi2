@@ -196,6 +196,25 @@ public class UserService : IUserService
         return true;
     }
 
+    public async Task<bool> PutUserAsync(DTOs.PutUserDTO dto, string name)
+    {
+        var user = await _repo.GetUserByNameAsync(name);
+        if (user == null)
+            return false;
+
+        // Update DOB if provided and valid
+        if (!string.IsNullOrWhiteSpace(dto.Dob))
+        {
+            if (!DateTime.TryParse(dto.Dob, out var parsedDob))
+                return false; // Invalid date format
+
+            user.Dob = DateTime.SpecifyKind(parsedDob, DateTimeKind.Utc);
+        }
+
+        await _repo.UpdateAsync(user);
+        return true;
+    }
+
     public async Task<bool> DeleteUserAsync(DTOs.DeleteUserDTO dto)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Password))

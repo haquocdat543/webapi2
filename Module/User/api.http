@@ -49,6 +49,16 @@ Authorization: {{TOKEN}}
 
 {
 	"dob": "2000-01-01",
+	"address": "South Vietnam"
+}
+
+### PUT /api/user
+PUT {{webapi_HostAddress}}/api/user
+Content-Type: application/json
+Authorization: {{TOKEN}}
+
+{
+	"dob": "2000-01-01",
 	"role": "Leader",
 	"address": "South Vietnam"
 }

@@ -101,6 +101,26 @@ public class UserController : ControllerBase
         return Ok(); // or Ok() if you prefer no body
     }
 
+    [Authorize]
+    [HttpPut()]
+    public async Task<IActionResult> PutUser([FromBody] PutUserDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var authHeader = Request.Headers["Authorization"].ToString();
+        var username = _jwtService.ExtractUsernameFromBearer(authHeader);
+
+        if (username == null)
+            return Forbid();
+
+        var result = await _userService.PutUserAsync(dto, username);
+        if (!result)
+            return Unauthorized();
+
+        return Ok(); // or Ok() if you prefer no body
+    }
+
     [HttpDelete()]
     public async Task<IActionResult> DeleteUser([FromBody] DeleteUserDTO dto)
     {
